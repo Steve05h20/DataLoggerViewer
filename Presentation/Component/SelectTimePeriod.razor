@@ -1,0 +1,39 @@
+﻿@namespace DataLoggerViewer.Presentation.Component
+@using DataLoggerViewer.Presentation.Services
+@using DataLoggerViewer.Presentation
+@using Microsoft.AspNetCore.Components.Forms
+@inject IDateState DateState
+
+<EditForm Model="@DateState" OnValidSubmit="@ApplyRange">
+<fieldset class="fieldset bg-base-200 border-base-300 border p-2">
+      <legend class="fieldset-legend">Select time period</legend>
+
+      <label class="label my-2">
+        <span class="label-text">Start Date</span>
+        <InputDate @bind-Value="startDate"  class="input" />
+      </label>
+
+      <label class="label my-2">
+        <span class="label-text">End Date</span>
+        <InputDate @bind-Value="endDate" class="input" />
+      </label>
+
+      <button class="btn btn-success w-full mt-4" type="submit">Apply</button>
+    </fieldset>
+</EditForm>
+
+@code {
+  private DateTime startDate;
+  private DateTime endDate;
+
+  protected override void OnInitialized()
+  {
+        startDate = DateState.From;
+        endDate = DateState.To;
+  }
+
+  private void ApplyRange()
+  {
+        DateState.SetRange(startDate, endDate);
+  }
+}

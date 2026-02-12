@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+
+@using DataLoggerViewer.Presentation.Component
+
+<div class="w-full page">
+
+    <NavMenu/>
+
+    <div class="w-full flex pt-18 ">
+        <SideBar />
+        <main class="content px-4 w-full">
+            @Body
+        </main>
+    </div>
+
+</div>

@@ -1,0 +1,51 @@
+﻿@namespace DataLoggerViewer.Presentation.Component
+@using DataLoggerViewer.Presentation.ViewModels
+
+<section class="overflow-x-auto">
+    <table class="table table-xs border border-base-300">
+          <thead>
+                <tr class="flex text-lg">
+                   <td>
+                    <h2>Events During Lift</h2>
+                   </td>
+                </tr>
+            </thead>
+        <thead class="bg-base-200">
+            <tr>
+                <td>Event</td>
+                <td>Date Time</td>
+                <td>Radius</td>
+                <td>Load</td>
+                <td>Capacity</td>
+                <td>Angle</td>
+                <td>Length</td>
+                <td>Slew</td>
+                <td>Wind Speed</td>
+                <td>Wind Gust</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Events)
+            {
+                <tr>
+                    <td>@item.Event</td>
+                    <td>@item.DateTime</td>
+                    <td>@item.Radius</td>
+                    <td>@item.Load</td>
+                    <td>@item.Capacity</td>
+                    <td>@item.Angle</td>
+                    <td>@item.Length</td>
+                    <td>@item.Slew</td>
+                    <td>@item.WindSpeed</td>
+                    <td>@item.WindGust</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<LiftEventSummaryViewModel> Events { get; set; } = default!;
+}

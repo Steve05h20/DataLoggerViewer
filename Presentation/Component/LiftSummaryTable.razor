@@ -1,0 +1,51 @@
+@namespace DataLoggerViewer.Presentation.Component
+@using DataLoggerViewer.Presentation.ViewModels
+
+<section class="overflow-x-auto">
+  <table class="table table-xs border  border-base-300">
+    <thead>
+      <tr>
+        <td>
+          <h2 class="text-lg">Summary info for:</h2><span class="text-md">@DateFrom - @DateTo</span>
+        </td>
+      </tr>
+    </thead>
+    <thead class="bg-base-200">
+      <tr>
+        <th>#</th>
+        <th>Start Of Lift</th>
+        <th>End Of Lift</th>
+        <th>Max %SWL Reach</th>
+        <th>Nb Approach</th>
+        <th>Nb Over</th>
+        <th>Nb Cut Off</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var (item, i) in Items.Select((x, i) => (x, i)))
+      {
+        <tr>
+          <td>@(i + 1)</td>
+          <td>@item.Start</td>
+          <td>@item.End</td>
+          <td>@item.MaxSWLReached</td>
+          <td>@item.NbApproach</td>
+          <td>@item.NbOver</td>
+          <td>@item.NbCutOff</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+@code {
+
+  [Parameter, EditorRequired]
+  public IReadOnlyList<LiftSummaryViewModel> Items { get; set; } = default!;
+
+  [Parameter, EditorRequired]
+  public string DateFrom { get; set; } = default!;
+  [Parameter, EditorRequired]
+  public string DateTo { get; set; } = default!;
+
+}

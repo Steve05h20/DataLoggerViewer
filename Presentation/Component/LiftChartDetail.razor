@@ -1,0 +1,49 @@
+﻿@namespace DataLoggerViewer.Presentation.Component
+@using DataLoggerViewer.Presentation.ViewModels
+
+<div class="w-full p-4">
+    <h2 class="text-lg mb-4">Detail Info for Lift #1</h2>
+    
+    <div class="w-full flex flex-col gap-1">
+        @foreach (var serie in LiftTimeSeries)
+        {
+            <div class="flex items-center w-full">
+                <div class="w-24 font-semibold text-sm ">@serie.Title:</div>
+                <div class="flex-1 flex h-8">
+                    @foreach (var point in serie.Points)
+                    {
+                        <div class="flex-1 border border-base-300 @(point.value ? "bg-success" : "bg-error")"></div>
+                    }
+                </div>
+            </div>
+        }
+        
+        <div class="flex items-center w-full">
+            <div class="w-24  text-sm ">Time:</div>
+            <div class="flex-1 flex">
+                @foreach (var point in SelectedLiftTimeSeries.Points)
+                {
+                    <div class="flex-1 text-xs text-center flex flex-col justify-center">
+                        <div>@point.Timestamp.ToString("dd/MM/yyyy")</div>
+                        <div>@point.Timestamp.ToString("HH:mm:ss")</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<LiftTimeSeriesGroupViewModel> LiftTimeSeries { get; set; } = default!;
+
+    private LiftTimeSeriesGroupViewModel SelectedLiftTimeSeries { get; set; } = default!;
+
+    protected override void OnParametersSet()
+    {
+        if (LiftTimeSeries != null && LiftTimeSeries.Count > 0)
+        {
+            SelectedLiftTimeSeries = LiftTimeSeries[0];
+        }
+    }
+}

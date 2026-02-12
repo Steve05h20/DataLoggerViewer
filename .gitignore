@@ -1,0 +1,38 @@
+# Build outputs
+bin/
+obj/
+artifacts/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider/VS/VS Code
+.vs/
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# MAUI/Blazor static assets (generated)
+wwwroot/css/*.map
+wwwroot/app.css
+
+# Publish outputs
+publish/

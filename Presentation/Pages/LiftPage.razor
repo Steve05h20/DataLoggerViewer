@@ -1,0 +1,55 @@
+﻿@page "/Lift"
+@page "/"
+
+@using DataLoggerViewer.Presentation.ViewModels
+@using DataLoggerViewer.Presentation.Component
+@using DataLoggerViewer.Presentation.Services
+@inject ILiftSummaryService LiftSummaryService
+@inject IDateState DateState
+@implements IDisposable
+
+<LiftSummaryTable Items="@summaries" DateFrom="@dateFrom" DateTo="@dateTo" />
+<LiftSummaryDetailsTable/>
+<LiftChartDetail LiftTimeSeries="@liftTimeSeries" />
+<LiftEventSummaryTable Events="@events" />
+<LiftEventSummaryDetailTable />
+
+@code {
+    private IReadOnlyList<LiftSummaryViewModel> summaries = Array.Empty<LiftSummaryViewModel>();
+    private IReadOnlyList<LiftEventSummaryViewModel> events = Array.Empty<LiftEventSummaryViewModel>();
+    private IReadOnlyList<LiftTimeSeriesGroupViewModel> liftTimeSeries = Array.Empty<LiftTimeSeriesGroupViewModel>();
+    private DateTimeOffset from;
+    private DateTimeOffset to;
+    private string dateFrom = string.Empty;
+    private string dateTo = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        from = DateState.From;
+        to = DateState.To;
+        dateFrom = from.ToString("yyyy-MM-dd");
+        dateTo = to.ToString("yyyy-MM-dd");
+        DateState.RangeChanged += OnRangeChanged;
+
+        events = await LiftSummaryService.GetEventsForSummaryId(1);
+        summaries = await LiftSummaryService.GetSummariesForRange(from.DateTime, to.DateTime);
+        liftTimeSeries = await LiftSummaryService.GetTimeSeriesForSummaryId(1);
+    }
+
+    private async void OnRangeChanged()
+    {
+        from = DateState.From;
+        to = DateState.To;
+        dateFrom = from.ToString("yyyy-MM-dd");
+        dateTo = to.ToString("yyyy-MM-dd");
+        summaries = await LiftSummaryService.GetSummariesForRange(from.DateTime, to.DateTime);
+        events = await LiftSummaryService.GetEventsForSummaryId(1);
+        liftTimeSeries = await LiftSummaryService.GetTimeSeriesForSummaryId(1);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        DateState.RangeChanged -= OnRangeChanged;
+    }
+}

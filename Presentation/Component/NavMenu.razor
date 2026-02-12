@@ -1,0 +1,151 @@
+﻿@namespace DataLoggerViewer.Presentation.Component
+@inject NavigationManager Navigation
+<header class="bg-base-200 py-2 px-8 flex justify-between items-center w-full shadow-md fixed z-50">
+
+    <h1 class="text-2xl font-bold text-gray-500">
+        DataLogger Viewer
+    </h1>
+    
+    <ul class="menu menu-horizontal bg-base-200 rounded-box gap-1">
+        @foreach (MenuItem menu in menus)
+        {
+            <li @onclick="()=>HandleMenuHover(menu)" 
+                @onmouseleave="HandleMenuLeave"
+                class="relative">
+                
+                <a class="@(menu.IsExpanded ? "bg-base-300" : "") hover:bg-base-300 transition-colors rounded-md px-4 py-2">
+                    @menu.Title
+                    @if (menu.UnderMenu != null)
+                    {
+                        <span class="ml-1 text-xs">▼</span>
+                    }
+                </a>
+                
+                @if (menu.UnderMenu != null && menu.IsExpanded)
+                {
+                    <ul class="absolute top-full left-0 mt-1 w-48 bg-base-100 rounded-box shadow-xl border border-base-300 z-50 py-2"
+                        @onclick:stopPropagation="true">
+                        @foreach (MenuItem subMenu in menu.UnderMenu)
+                        {
+                            <li>
+                                <a href="@subMenu.Link" 
+                                   class="px-4 py-2 hover:bg-base-200 transition-colors block rounded-md">
+                                    @subMenu.Title
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+    
+  
+    
+    <!-- Navigation secondaire améliorée -->
+    <nav class=" gap-2">
+        <div role="tablist" class="tabs tabs-box">
+            @foreach (string pageItems in pages)
+            {
+                <a role="tab" href="/@pageItems" class="tab @(currentPage == pageItems ? "bg-success" : "bg-base-300")">@pageItems </a>
+            }
+        </div>
+    </nav>
+</header>
+
+@code {
+    List<string> pages = new List<string> { "Lift", "Limits Alarms", "Bypass/Bridging", "Alarms","Working Time", "Wind Logging" };
+    private MenuItem? _activeMenu;
+    private System.Threading.Timer? _closeTimer;
+    private string currentPage = string.Empty;
+
+    protected override void OnInitialized() 
+    {
+       currentPage = Navigation.Uri.Split('/').LastOrDefault() ?? string.Empty;
+    }
+
+    MenuItem[] menus = new MenuItem[]
+    {
+        new MenuItem
+        {
+            Title = "File",
+            UnderMenu = new MenuItem[]
+            {
+                new MenuItem { Title = "Open", Link = "/open" },
+                new MenuItem { Title = "Save As", Link = "/save" },
+                new MenuItem { Title = "Exit", Link = "/" },
+            }
+        },
+        new MenuItem
+        {
+            Title = "Tools",
+            UnderMenu = new MenuItem[]
+            {
+                new MenuItem { Title = "Options", Link = "/options" },
+                new MenuItem { Title = "Settings", Link = "/settings" },
+            }
+        },
+        new MenuItem
+        {
+            Title = "Transfer",
+            UnderMenu = new MenuItem[]
+            {
+                new MenuItem { Title = "Export", Link = "/export" },
+                new MenuItem { Title = "Import", Link = "/import" },
+            }
+        },
+        new MenuItem
+        {
+            Title = "Help",
+            UnderMenu = new MenuItem[]
+            {
+                new MenuItem { Title = "Documentation", Link = "/docs" },
+                new MenuItem { Title = "About", Link = "/about" },
+            }
+        },
+        
+    };
+
+    private void HandleMenuHover(MenuItem menu)
+    {
+        _closeTimer?.Dispose();
+        CloseAllMenus();
+        menu.IsExpanded = true;
+        _activeMenu = menu;
+    }
+
+    private void HandleMenuLeave()
+    {
+        _closeTimer?.Dispose();
+        _closeTimer = new System.Threading.Timer(_ =>
+        {
+            InvokeAsync(() =>
+            {
+                CloseAllMenus();
+                StateHasChanged();
+            });
+        }, null, 300, System.Threading.Timeout.Infinite);
+    }
+
+    private void CloseAllMenus()
+    {
+        foreach (var menu in menus)
+        {
+            menu.IsExpanded = false;
+        }
+        _activeMenu = null;
+    }
+
+    public void Dispose()
+    {
+        _closeTimer?.Dispose();
+    }
+
+    class MenuItem
+    {   
+        public string? Title { get; set; }
+        public MenuItem[]? UnderMenu { get; set; }
+        public string? Link { get; set; }
+        public bool IsExpanded { get; set; } = false;
+    }
+}
