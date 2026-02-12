@@ -1,15 +1,10 @@
 @namespace DataLoggerViewer.Presentation.Component
 @using DataLoggerViewer.Presentation.ViewModels
 
-<section class="overflow-x-auto">
+
+<h2 class="text-lg my-4"> Summary info for: @DateFrom - @DateTo </h2>
+<section class="max-h-40 overflow-y-auto block">
   <table class="table table-xs border  border-base-300">
-    <thead>
-      <tr>
-        <td>
-          <h2 class="text-lg">Summary info for:</h2><span class="text-md">@DateFrom - @DateTo</span>
-        </td>
-      </tr>
-    </thead>
     <thead class="bg-base-200">
       <tr>
         <th>#</th>
@@ -22,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      @foreach (var (item, i) in Items.Select((x, i) => (x, i)))
+      @foreach (var (item, i) in Summaries.Select((x, i) => (x, i)))
       {
         <tr>
           <td>@(i + 1)</td>
@@ -41,7 +36,7 @@
 @code {
 
   [Parameter, EditorRequired]
-  public IReadOnlyList<LiftSummaryViewModel> Items { get; set; } = default!;
+  public IReadOnlyList<LiftSummaryViewModel> Summaries { get; set; } = default!;
 
   [Parameter, EditorRequired]
   public string DateFrom { get; set; } = default!;

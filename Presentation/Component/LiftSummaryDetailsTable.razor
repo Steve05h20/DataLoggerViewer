@@ -41,9 +41,42 @@
             </tr>
        </tbody>
    </table>
+    <table class="table-auto table-xs  w-full mt-2 border-base-300 border-t">
+        <tbody class="table">
+            <tr class="table-cells text-center">
+               <td class="font-medium">20%</td>
+               <td class="font-medium">>20%</td>
+               <td class="font-medium">>30%</td>
+               <td class="font-medium">>40%</td>
+               <td class="font-medium">>50%</td>
+               <td class="font-medium">>60%</td>
+               <td class="font-medium">>70%</td>
+               <td class="font-medium">>80%</td>
+               <td class="font-medium">>90%</td>
+               <td class="font-medium">>100%</td>
+               <td class="font-medium">>110%</td>
+               <td class="font-medium">>120%</td>
+            </tr>
+            <tr class="table-cells text-center bg-base-300">
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+               <td >0</td>
+            </tr>
+        </tbody>
+    </table>
 </section>
 
 
 @code{
-    
+    [Parameter, EditorRequired]
+    public LiftSummariesDetailViewModel SummariesDetail { get; set; } = default!;
 }

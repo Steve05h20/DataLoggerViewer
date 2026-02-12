@@ -9,6 +9,16 @@ namespace DataLoggerViewer.Presentation.ViewModels
         int NbCutOff
     );
 
+    public record ObjectValue<T>(
+        string Key,
+        T Value
+    );
+    public record LiftSummariesDetailViewModel(
+        List<ObjectValue<int>> SummariesDetails,
+        List<ObjectValue<DateTime>> SummariesTimeDetails,
+        List<ObjectValue<int>> LiftBuckets
+    );
+
     public record LiftEventSummaryViewModel(
         string Event,
         DateTime DateTime,
