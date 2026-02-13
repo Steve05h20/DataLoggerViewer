@@ -41,7 +41,7 @@ namespace DataLoggerViewer.Presentation.Services
             return Task.FromResult((IReadOnlyList<LiftEventSummaryViewModel>)events);
         }
 
-        public Task<IReadOnlyList<LiftTimeSeriesGroupViewModel>> GetTimeSeriesForSummaryId(int id)
+        public Task<IReadOnlyList<LiftTimeSeriesGroupViewModel>> GetTimeSeriesForSummaryId(int summaryId)
         {
             var liftTimeSeriesPoints = new List<LiftTimeSeriesGroupViewModel>
 {
@@ -144,13 +144,24 @@ namespace DataLoggerViewer.Presentation.Services
                     new (">70%", 0),
                     new (">80%", 0),
                     new (">90%", 0),
-                    new (">100%", 0),
+                    new (">100%",0),
                     new (">120%", 0)
-
                 }
             );
             return Task.FromResult(details);
+        }
 
+        public Task<LiftEventSummaryDetailViewModel> GetDetailsForEventsForSummaryId(int summaryId)
+        {
+            var details = new LiftEventSummaryDetailViewModel(
+                new List<ObjectValue<string>>
+                {
+                    new ("Event 1", "Detail 1"),
+                    new ("Event 2", "Detail 2"),
+                    new ("Event 3", "Detail 3")
+                }
+            );
+            return Task.FromResult(details);
         }
     }
 }

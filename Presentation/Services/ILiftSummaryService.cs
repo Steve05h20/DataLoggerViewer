@@ -9,5 +9,6 @@ namespace DataLoggerViewer.Presentation.Services
         Task<IReadOnlyList<LiftEventSummaryViewModel>> GetEventsForSummaryId(int id);
         Task<IReadOnlyList<LiftTimeSeriesGroupViewModel>> GetTimeSeriesForSummaryId(int id);
         Task<LiftSummariesDetailViewModel> GetDetailsForSummariesRange(DateTime from, DateTime to);
+        Task<LiftEventSummaryDetailViewModel> GetDetailsForEventsForSummaryId(int id);
     }
 }

@@ -9,6 +9,10 @@ namespace DataLoggerViewer.Presentation.ViewModels
         int NbCutOff
     );
 
+    public record LiftEventSummaryDetailViewModel(
+        List<ObjectValue<string>> EventDetails
+    );
+
     public record ObjectValue<T>(
         string Key,
         T Value
@@ -45,3 +49,4 @@ namespace DataLoggerViewer.Presentation.ViewModels
     }
 }
 }
+

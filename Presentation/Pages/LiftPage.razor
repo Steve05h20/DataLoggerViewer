@@ -12,13 +12,14 @@
 <LiftSummaryDetailsTable SummariesDetail="@summariesDetail" />
 <LiftChartDetail LiftTimeSeries="@liftTimeSeries" />
 <LiftEventSummaryTable Events="@events" />
-<LiftEventSummaryDetailTable />
+<LiftEventSummaryDetailTable EventsDetail="@eventsDetail" />
 
 @code {
     private IReadOnlyList<LiftSummaryViewModel> summaries = Array.Empty<LiftSummaryViewModel>();
     private IReadOnlyList<LiftEventSummaryViewModel> events = Array.Empty<LiftEventSummaryViewModel>();
     private IReadOnlyList<LiftTimeSeriesGroupViewModel> liftTimeSeries = Array.Empty<LiftTimeSeriesGroupViewModel>();
     private LiftSummariesDetailViewModel summariesDetail = default!;
+    private LiftEventSummaryDetailViewModel eventsDetail = default!;
     private DateTimeOffset from;
     private DateTimeOffset to;
     private string dateFrom = string.Empty;
@@ -36,6 +37,7 @@
         summaries = await LiftSummaryService.GetSummariesForRange(from.DateTime, to.DateTime);
         summariesDetail = await LiftSummaryService.GetDetailsForSummariesRange(from.DateTime, to.DateTime);
         liftTimeSeries = await LiftSummaryService.GetTimeSeriesForSummaryId(1);
+        eventsDetail =  await LiftSummaryService.GetDetailsForEventsForSummaryId(1);
     }
 
     private async void OnRangeChanged()
@@ -48,6 +50,7 @@
         events = await LiftSummaryService.GetEventsForSummaryId(1);
         summariesDetail = await LiftSummaryService.GetDetailsForSummariesRange(from.DateTime, to.DateTime);
         liftTimeSeries = await LiftSummaryService.GetTimeSeriesForSummaryId(1);
+        eventsDetail =  await LiftSummaryService.GetDetailsForEventsForSummaryId(1);
         await InvokeAsync(StateHasChanged);
     }
 
