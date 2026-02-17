@@ -1,82 +1,71 @@
 @namespace DataLoggerViewer.Presentation.Component
 @using DataLoggerViewer.Presentation.ViewModels
 
-<section class="bg-base-200 border-base-300 border p-2 my-4 rounded-xl">
-   <table class="table-auto table-xs w-full">
-       <tbody class="table">
-           <tr class="">
-               <td class="font-medium">Duty:</td>
-               <td class=" border-r border-base-300">018894</td>
-               <td class="font-medium">User Id:</td>
-               <td class="border-r border-base-300">Telescopique</td>
-                <td class="font-medium">Max %SWL </td>
-               <td class="border-r border-base-300">SC1922006v512</td>     
-           </tr>
-    
-           <tr class="">
-               <td class="font-medium">Parts: </td>
-               <td class="border-r border-base-300">Demo Telescopique</td>
-               <td class="font-medium">Load Max SWL </td>
-               <td class="border-r border-base-300">90.0</td>
-               <td class="font-medium">Capacity Max %SWL</td>
-               <td class="border-r border-base-300">100.0</td>
-           </tr>
-     
-           <tr class="">
-               <td class="font-medium">Radius Max %SWL</td>
-               <td class="border-r border-base-300">110.0</td>
-               <td class="font-medium">Angle/Luff Max %</td>
-               <td class="border-r border-base-300">110.0</td>
-               <td class="font-medium">Length Max %SWL</td>
-               <td class="border-r border-base-300">110.0</td>
-           </tr>
+
+
+<section class="w-full">
+
+<section class="flex flex-row items-center gap-4">
+
+    <div class="stats shadow stats-vertical  my-4 bg-white basis-1/3">
+
+        @foreach (var item in Details.SummariesTimeDetails)
+        {
+            <div class="stat">
+                <div class="stat-title font-medium">@item.Key</div>
+                <div class="stat-value text-lg font-semibold">@item.Value</div>
+            </div>
+        }
+    </div>
+
+
+<div class="w-full bg-white  p-6 rounded-xl shadow basis-2/3">
+    <!-- Chart container -->
+    <div class=" w-full h-66 flex items-end justify-between gap-4 border-b border-l border-gray-200 relative">
+
+        <!-- Grid horizontal -->
+        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+            @foreach (var item in Details.LiftBuckets)
+            {
+                <div class="border-t border-dashed border-gray-200"></div>
+            }
+        </div>
         
-           <tr class="">
-               <td class="font-medium">Radius Max / Min:L</td>
-               <td class="border-r border-base-300">110.0</td>
-               <td class="font-medium">Angle Max / Min :</td>
-               <td class="border-r border-base-300">110.0</td>
-               <td class="font-medium">Lift duration :</td>
-               <td class="border-r border-base-300">110.0</td>
-            </tr>
-       </tbody>
-   </table>
-    <table class="table-auto table-xs  w-full mt-2 border-base-300 border-t">
-        <tbody class="table">
-            <tr class="table-cells text-center">
-               <td class="font-medium">20%</td>
-               <td class="font-medium">>20%</td>
-               <td class="font-medium">>30%</td>
-               <td class="font-medium">>40%</td>
-               <td class="font-medium">>50%</td>
-               <td class="font-medium">>60%</td>
-               <td class="font-medium">>70%</td>
-               <td class="font-medium">>80%</td>
-               <td class="font-medium">>90%</td>
-               <td class="font-medium">>100%</td>
-               <td class="font-medium">>110%</td>
-               <td class="font-medium">>120%</td>
-            </tr>
-            <tr class="table-cells text-center bg-base-300">
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-               <td >0</td>
-            </tr>
-        </tbody>
-    </table>
+        @foreach (var item in Details.LiftBuckets)
+        {
+            <!-- Bars -->
+            <div class="flex flex-col items-center gap-2 z-10">
+                <div class="w-6 bg-base-content rounded-sm" style="height:@(item.Value * 24)px"></div>
+                <span class=" font-medium text-base-content">@item.Key</span>
+            </div>
+        }
+    </div>
+</div>
+
+</section>
+
+<div class="stats shadow h-26 w-full bg-white ">
+    @foreach (var item in Details.SummariesDetails)
+    {
+        <div class="stat">
+            <div class="stat-title text-lg font-normal">@item.Key</div>
+            <div class="stat-value text-base-content text-3xl font-mono">@item.Value</div>
+        </div>
+    }
+</div>
+
+
+
+
+
 </section>
 
 
-@code{
+
+
+
+
+@code {
     [Parameter, EditorRequired]
-    public LiftSummariesDetailViewModel SummariesDetail { get; set; } = default!;
+    public LiftSummariesDetailViewModel Details { get; set; } = default!;
 }

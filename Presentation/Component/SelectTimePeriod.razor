@@ -8,13 +8,13 @@
 <fieldset class="fieldset bg-base-200 border-base-300 border p-2">
       <legend class="fieldset-legend">Select time period</legend>
 
-      <label class="label my-2">
-        <span class="label-text">Start Date</span>
+      <label class="label flex flex-col items-start">
+        <span class="label-text">From</span>
         <InputDate @bind-Value="startDate"  class="input" />
       </label>
 
-      <label class="label my-2">
-        <span class="label-text">End Date</span>
+      <label class="label flex flex-col items-start">
+        <span class="label-text">To</span>
         <InputDate @bind-Value="endDate" class="input" />
       </label>
 

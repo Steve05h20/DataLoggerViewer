@@ -1,0 +1,46 @@
+﻿@namespace DataLoggerViewer.Presentation.Component
+@inject NavigationManager Navigation
+
+    
+   <div role="tablist" class="tabs tabs-lift">
+            @foreach (string pageItems in pages)
+            {
+                <a role="tab" href="/@pageItems" class="tab font-medium min-w-25 @(currentPage == NormalizePage(pageItems) ? " tab-active" : "bg-base-200")">@pageItems </a>
+            }
+            </div>
+
+
+@code {
+    List<string> pages = new List<string> {"Home","Lift", "Limits Alarms", "Bypass/Bridging", "Alarms","Working Time", "Wind Logging" };
+
+    private string currentPage = string.Empty;
+
+    protected override void OnInitialized()
+    {
+       Navigation.LocationChanged += OnLocationChanged;
+       currentPage = GetCurrentPageFromUri(Navigation.Uri);
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        currentPage = GetCurrentPageFromUri(e.Location);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private static string GetCurrentPageFromUri(string uri)
+    {
+        var path = new Uri(uri).AbsolutePath.Trim('/');
+        return NormalizePage(Uri.UnescapeDataString(path));
+    }
+
+    private static string NormalizePage(string page)
+    {
+        return page.Trim().ToLowerInvariant();
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+}

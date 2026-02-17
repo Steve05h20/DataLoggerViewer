@@ -1,5 +1,5 @@
 ﻿@page "/Lift"
-@page "/"
+
 
 @using DataLoggerViewer.Presentation.ViewModels
 @using DataLoggerViewer.Presentation.Component
@@ -8,47 +8,26 @@
 @inject IDateState DateState
 @implements IDisposable
 
-<LiftSummaryTable Summaries="@summaries" DateFrom="@dateFrom" DateTo="@dateTo" />
-<LiftSummaryDetailsTable SummariesDetail="@summariesDetail" />
 <LiftChartDetail LiftTimeSeries="@liftTimeSeries" />
 <LiftEventSummaryTable Events="@events" />
 <LiftEventSummaryDetailTable EventsDetail="@eventsDetail" />
 
 @code {
-    private IReadOnlyList<LiftSummaryViewModel> summaries = Array.Empty<LiftSummaryViewModel>();
     private IReadOnlyList<LiftEventSummaryViewModel> events = Array.Empty<LiftEventSummaryViewModel>();
     private IReadOnlyList<LiftTimeSeriesGroupViewModel> liftTimeSeries = Array.Empty<LiftTimeSeriesGroupViewModel>();
-    private LiftSummariesDetailViewModel summariesDetail = default!;
     private LiftEventSummaryDetailViewModel eventsDetail = default!;
-    private DateTimeOffset from;
-    private DateTimeOffset to;
-    private string dateFrom = string.Empty;
-    private string dateTo = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        from = DateState.From;
-        to = DateState.To;
-        dateFrom = from.ToString("yyyy-MM-dd");
-        dateTo = to.ToString("yyyy-MM-dd");
         DateState.RangeChanged += OnRangeChanged;
-
         events = await LiftSummaryService.GetEventsForSummaryId(1);
-        summaries = await LiftSummaryService.GetSummariesForRange(from.DateTime, to.DateTime);
-        summariesDetail = await LiftSummaryService.GetDetailsForSummariesRange(from.DateTime, to.DateTime);
         liftTimeSeries = await LiftSummaryService.GetTimeSeriesForSummaryId(1);
         eventsDetail =  await LiftSummaryService.GetDetailsForEventsForSummaryId(1);
     }
 
     private async void OnRangeChanged()
     {
-        from = DateState.From;
-        to = DateState.To;
-        dateFrom = from.ToString("yyyy-MM-dd");
-        dateTo = to.ToString("yyyy-MM-dd");
-        summaries = await LiftSummaryService.GetSummariesForRange(from.DateTime, to.DateTime);
         events = await LiftSummaryService.GetEventsForSummaryId(1);
-        summariesDetail = await LiftSummaryService.GetDetailsForSummariesRange(from.DateTime, to.DateTime);
         liftTimeSeries = await LiftSummaryService.GetTimeSeriesForSummaryId(1);
         eventsDetail =  await LiftSummaryService.GetDetailsForEventsForSummaryId(1);
         await InvokeAsync(StateHasChanged);

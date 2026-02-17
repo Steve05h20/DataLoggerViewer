@@ -1,0 +1,46 @@
+@page "/"
+@page "/Home"
+@using DataLoggerViewer.Presentation.Services
+@using DataLoggerViewer.Presentation.ViewModels
+@using DataLoggerViewer.Presentation.Component
+@inject ILiftSummaryService LiftSummaryService
+@inject IDateState DateState
+<LiftSummaryTable Summaries="@summaries" DateFrom="@dateFrom" DateTo="@dateTo" />
+<LiftSummaryDetailsTable Details="@summariesDetail" />
+
+@code {
+    private IReadOnlyList<LiftSummaryViewModel> summaries = Array.Empty<LiftSummaryViewModel>();
+    private LiftSummariesDetailViewModel summariesDetail = default!;
+    private DateTimeOffset from;
+    private DateTimeOffset to;
+
+    private string dateFrom = string.Empty;
+    private string dateTo = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        from = DateState.From;
+        to = DateState.To;
+        dateFrom = from.ToString("yyyy-MM-dd");
+        dateTo = to.ToString("yyyy-MM-dd");
+        summaries = await LiftSummaryService.GetSummariesForRange(from.DateTime, to.DateTime);
+        summariesDetail = await LiftSummaryService.GetDetailsForSummariesRange(from.DateTime, to.DateTime);
+    }
+
+     private async void OnRangeChanged()
+    {
+        from = DateState.From;
+        to = DateState.To;
+        dateFrom = from.ToString("yyyy-MM-dd");
+        dateTo = to.ToString("yyyy-MM-dd");
+        summaries = await LiftSummaryService.GetSummariesForRange(from.DateTime, to.DateTime);
+        summariesDetail = await LiftSummaryService.GetDetailsForSummariesRange(from.DateTime, to.DateTime);
+    }
+
+
+        public void Dispose()
+    {
+        DateState.RangeChanged -= OnRangeChanged;
+    }
+
+}

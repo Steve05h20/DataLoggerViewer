@@ -135,17 +135,17 @@ namespace DataLoggerViewer.Presentation.Services
                 },
                 new List<ObjectValue<int>>
                 {
-                    new ("<20%", 0),
-                    new (">20%", 0),
-                    new (">30%", 0),
-                    new (">40%", 0),
-                    new (">50%", 0),
-                    new (">60%", 0),
-                    new (">70%", 0),
+                    new ("<20%", 1),
+                    new (">20%", 2),
+                    new (">30%", 1),
+                    new (">40%", 4),
+                    new (">50%", 3),
+                    new (">60%", 3),
+                    new (">70%", 1),
                     new (">80%", 0),
-                    new (">90%", 0),
-                    new (">100%",0),
-                    new (">120%", 0)
+                    new (">90%", 2),
+                    new (">100%",5),
+                    new (">120%", 9)
                 }
             );
             return Task.FromResult(details);

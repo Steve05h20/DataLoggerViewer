@@ -1,19 +1,16 @@
 ﻿@namespace DataLoggerViewer.Presentation.Component
 @inject NavigationManager Navigation
-<header class="bg-base-200 py-2 px-8 flex justify-between items-center w-full shadow-md fixed z-50">
+<header class="bg-base-100 px-8 flex justify-between items-center w-full shadow-md fixed z-50">
 
-    <h1 class="text-2xl font-bold text-gray-500">
-        DataLogger Viewer
-    </h1>
     
-    <ul class="menu menu-horizontal bg-base-200 rounded-box gap-1">
+    <ul class="menu menu-horizontal bg-base-100 rounded-box gap-1">
         @foreach (MenuItem menu in menus)
         {
             <li @onclick="()=>HandleMenuHover(menu)" 
                 @onmouseleave="HandleMenuLeave"
                 class="relative">
                 
-                <a class="@(menu.IsExpanded ? "bg-base-300" : "") hover:bg-base-300 transition-colors rounded-md px-4 py-2">
+                <a class="@(menu.IsExpanded ? "bg-base-300" : "") hover:bg-base-300 transition-colors rounded-md px-4">
                     @menu.Title
                     @if (menu.UnderMenu != null)
                     {
@@ -23,7 +20,7 @@
                 
                 @if (menu.UnderMenu != null && menu.IsExpanded)
                 {
-                    <ul class="absolute top-full left-0 mt-1 w-48 bg-base-100 rounded-box shadow-xl border border-base-300 z-50 py-2"
+                    <ul class="absolute top-full left-[-18px]  w-48 bg-base-100 rounded-box shadow-xl border border-base-300 z-50 "
                         @onclick:stopPropagation="true">
                         @foreach (MenuItem subMenu in menu.UnderMenu)
                         {
@@ -41,28 +38,16 @@
     </ul>
     
   
+    <h1 class="text-2xl font-bold text-base-300">
+       <a href="/">DataLogger Viewer</a>
+    </h1>
     
-    <!-- Navigation secondaire améliorée -->
-    <nav class=" gap-2">
-        <div role="tablist" class="tabs tabs-box">
-            @foreach (string pageItems in pages)
-            {
-                <a role="tab" href="/@pageItems" class="tab @(currentPage == pageItems ? "bg-success" : "bg-base-300")">@pageItems </a>
-            }
-        </div>
-    </nav>
 </header>
 
 @code {
-    List<string> pages = new List<string> { "Lift", "Limits Alarms", "Bypass/Bridging", "Alarms","Working Time", "Wind Logging" };
     private MenuItem? _activeMenu;
     private System.Threading.Timer? _closeTimer;
-    private string currentPage = string.Empty;
 
-    protected override void OnInitialized() 
-    {
-       currentPage = Navigation.Uri.Split('/').LastOrDefault() ?? string.Empty;
-    }
 
     MenuItem[] menus = new MenuItem[]
     {
