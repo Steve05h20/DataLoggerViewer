@@ -1,13 +1,48 @@
 @namespace DataLoggerViewer.Presentation.Component
+@inject IDlogDirectoryService DlogDirectoryService
 
 <div class="w-86 justify-between p-2 border-r-2 border-base-200 flex flex-col gap-4">
-    <button class="btn btn-success ">Select Folder</button>
+    <button class="btn @(filesLoaded ? "btn-warning" : "btn-success")" @onclick="filesLoaded ? ClearFilesAsync : SelectFolderAsync"> @(filesLoaded ? "Clear Folder" : "Select Folder")</button>
     <SelectTimePeriod />
     <SelectCrane />
     <CraneInfo />
 
-
+    @if (_files.Any())
+    {
+        <div class="divider"></div>
+        <h2 class="text-lg font-bold">Loaded Files</h2>
+        <ul class="menu bg-base-100 rounded-box w-full">
+            @foreach (var file in _files)
+            {
+                <li>
+                    <a href="@file.FullPath" target="_blank" class="hover:bg-base-200 transition-colors block rounded-md">
+                        @file.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    }
 </div>
+
 @code {
 
+    private bool filesLoaded = false;
+    [Parameter]
+    public EventCallback<IEnumerable<DlogFileInfo>> OnFilesLoaded { get; set; }
+
+    private IEnumerable<DlogFileInfo> _files = Enumerable.Empty<DlogFileInfo>();
+
+    private Task ClearFilesAsync()
+    {
+        filesLoaded = false;
+        _files = Enumerable.Empty<DlogFileInfo>();
+        return OnFilesLoaded.InvokeAsync(_files);
+    }
+
+    private async Task SelectFolderAsync()
+    {
+        _files = await DlogDirectoryService.PickFolderAndGetDlogsAsync();
+        filesLoaded = _files.Any();
+        await OnFilesLoaded.InvokeAsync(_files);
+    }
 }

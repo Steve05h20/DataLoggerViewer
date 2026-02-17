@@ -18,6 +18,8 @@ namespace DataLoggerViewer
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddScoped<IDateState, DateState>();
             builder.Services.AddScoped<ILiftSummaryService, LiftSummaryService>();
+            builder.Services.AddSingleton<IDlogDirectoryService, DlogDirectoryService>();
+
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
