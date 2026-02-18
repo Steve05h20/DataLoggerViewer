@@ -33,6 +33,8 @@ node_modules/
 # MAUI/Blazor static assets (generated)
 wwwroot/css/*.map
 wwwroot/app.css
+wwwroot/output.css
+
 
 # Publish outputs
 publish/
